@@ -86,23 +86,51 @@ library ieee;
   use ieee.numeric_std.all;
  
 entity thunderbird_fsm is 
---  port(
-	
---  );
+      port (
+          i_clk, i_reset  : in    std_logic;
+          i_left, i_right : in    std_logic;
+          o_lights_L      : out   std_logic_vector(2 downto 0);
+          o_lights_R      : out   std_logic_vector(2 downto 0)
+      );
 end thunderbird_fsm;
 
 architecture thunderbird_fsm_arch of thunderbird_fsm is 
 
 -- CONSTANTS ------------------------------------------------------------------
-  
-begin
 
-	-- CONCURRENT STATEMENTS --------------------------------------------------------	
-	
+      signal f_Q, f_Q_next : std_logic_vector (7 downto 0) := "10000000";
+
+begin
+  f_Q_next(7) <= (f_Q(7) and not i_Left and not i_Right) or 
+	                   (f_Q(6)) or (f_Q(3)) or (f_Q(0));
+        f_Q_next(6) <= (f_Q(7) and i_Left and i_Right);
+        f_Q_next(5) <= (f_Q(7) and not i_Left and i_Right);
+	    f_Q_next(4) <= (f_Q(5));
+        f_Q_next(3) <= (f_Q(4));
+        f_Q_next(2) <= (f_Q(7) and i_Left and not i_Right);
+        f_Q_next(1) <= (f_Q(2));
+        f_Q_next(0) <= (f_Q(1));        
+        
+        
     ---------------------------------------------------------------------------------
-	
+	-- Output logic
+        o_lights_L(2) <= (f_Q(6) or f_Q(0));
+        o_lights_L(1) <= (f_Q(6) or f_Q(1) or f_Q(0));
+        o_lights_L(0) <= (f_Q(6) or f_Q(2) or f_Q(1) or f_Q(0));
+        o_lights_R(0) <= (f_Q(6) or f_Q(5) or f_Q(4) or f_Q(3));
+        o_lights_R(1) <= (f_Q(6) or f_Q(4) or f_Q(3));
+        o_lights_R(2) <= (f_Q(6) or f_Q(3));
+        
+        
 	-- PROCESSES --------------------------------------------------------------------
-    
-	-----------------------------------------------------					   
+    register_proc : process (i_clk, i_reset)
+    begin
+            if i_reset = '1' then
+                    f_Q <= "10000000";
+            elsif (rising_edge(i_clk)) then
+                   f_Q <= f_Q_next;
+               end if;
+ 
+    end process register_proc;
 				  
 end thunderbird_fsm_arch;
