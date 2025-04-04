@@ -91,7 +91,9 @@ component thunderbird_fsm is
               i_clk, i_reset  : in    std_logic;
               i_left, i_right : in    std_logic;
               o_lights_L      : out   std_logic_vector(2 downto 0);
-              o_lights_R      : out   std_logic_vector(2 downto 0)
+              o_lights_R      : out   std_logic_vector(2 downto 0);
+              o_f_Q_cur       : out   std_logic_vector(7 downto 0);
+              o_f_Q_next      : out   std_logic_vector(7 downto 0)              
           );
       end component;
 component clock_divider is

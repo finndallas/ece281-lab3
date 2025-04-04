@@ -62,7 +62,9 @@ architecture test_bench of thunderbird_fsm_tb is
               i_clk, i_reset  : in    std_logic;
               i_left, i_right : in    std_logic;
               o_lights_L      : out   std_logic_vector(2 downto 0);
-              o_lights_R      : out   std_logic_vector(2 downto 0)
+              o_lights_R      : out   std_logic_vector(2 downto 0);
+              o_f_Q_cur       : out   std_logic_vector(7 downto 0);
+              o_f_Q_next      : out   std_logic_vector(7 downto 0)
           );
 	end component thunderbird_fsm;
 
@@ -73,6 +75,8 @@ architecture test_bench of thunderbird_fsm_tb is
     signal w_right : std_logic := '0';	
     signal w_lights_L : std_logic_vector(2 downto 0) := "000";
     signal w_lights_R : std_logic_vector(2 downto 0) := "000";
+    signal w_f_Q :  std_logic_vector(7 downto 0) := "10000000";
+    signal w_f_Q_next :  std_logic_vector(7 downto 0) := "10000000";
 	-- constants
 	constant k_clk_period : time := 10 ns;
 	
@@ -85,7 +89,9 @@ begin
 	   i_left => w_left,
 	   i_right => w_right,
 	   o_lights_L => w_lights_L,
-	   o_lights_R => w_lights_R
+	   o_lights_R => w_lights_R,
+	   o_f_Q_cur => w_f_Q,
+	   o_f_Q_next => w_f_Q_next
      ); 
 	
 	-----------------------------------------------------
